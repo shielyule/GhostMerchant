@@ -1,0 +1,23 @@
+{
+  "name": "ghostmerchant",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Agentic financial firewall — policy → AUTHORIZE → probe → CAPTURE/VOID + webhooks, payouts, disputes",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "probe": "node scripts/verify-probe.js",
+    "token": "node scripts/get-sandbox-token.js",
+    "demo:void": "node scripts/demo-poison-pill.js --outcome fail",
+    "demo:capture": "node scripts/demo-poison-pill.js --outcome pass",
+    "live:phase-b": "node scripts/live-phase-b.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

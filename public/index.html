@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GhostMerchant — Control Room</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="top">
+        <div>
+          <p class="eyebrow">PayPal AUTHORIZE → probe → CAPTURE / VOID</p>
+          <h1>GhostMerchant</h1>
+          <p class="tagline">Zero-trust escrow for autonomous buyers — not another virtual card.</p>
+        </div>
+        <div class="top-meta">
+          <div class="pill-row">
+            <div class="pill" id="velocityPill">Velocity —</div>
+            <button
+              type="button"
+              class="info-btn"
+              data-help="header-velocity"
+              aria-label="What is velocity?"
+            >
+              i
+            </button>
+          </div>
+          <div class="pill-row">
+            <div class="pill muted" id="pollPill">Polling…</div>
+            <button
+              type="button"
+              class="info-btn"
+              data-help="header-poll"
+              aria-label="What is polling?"
+            >
+              i
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="panel controls">
+        <div class="panel-head">
+          <h2>Policy sandbox</h2>
+          <button type="button" class="info-btn" data-help="policy" aria-label="About Policy sandbox">
+            i
+          </button>
+        </div>
+        <div class="controls-grid">
+          <label>
+            <span class="label-text">Default currency</span>
+            <select id="policyCurrency">
+              <option value="USD">USD</option>
+              <option value="GBP">GBP</option>
+              <option value="EUR">EUR</option>
+              <option value="CAD">CAD</option>
+              <option value="AUD">AUD</option>
+            </select>
+          </label>
+          <label>
+            <span class="label-text">Max single order</span>
+            <input type="number" id="maxAmount" min="1" step="1" />
+          </label>
+          <label>
+            <span class="label-text">Max velocity / min</span>
+            <input type="number" id="maxOrdersPerMinute" min="1" max="20" step="1" />
+          </label>
+          <label>
+            <span class="label-text">Probe window (ms)</span>
+            <input type="number" id="probeTimeoutMs" min="0" max="30000" step="500" />
+          </label>
+          <label class="check">
+            <span class="label-text">Poison pill</span>
+            <span class="check-control">
+              <input type="checkbox" id="forceProbeFail" />
+              Force probe fail
+            </span>
+          </label>
+        </div>
+        <div class="row">
+          <button type="button" class="btn ghost" id="savePolicy">Save policy</button>
+          <span class="hint" id="policyHint"></span>
+        </div>
+      </section>
+
+      <section class="panel demo">
+        <div class="panel-head">
+          <h2>Fire agent purchase</h2>
+          <button
+            type="button"
+            class="info-btn"
+            data-help="demo"
+            aria-label="About Fire agent purchase"
+          >
+            i
+          </button>
+        </div>
+        <div class="controls-grid">
+          <label>
+            <span class="label-text">Amount</span>
+            <input type="number" id="demoAmount" value="500" min="1" step="1" />
+          </label>
+          <label>
+            <span class="label-text">Currency</span>
+            <select id="demoCurrency">
+              <option value="USD">USD</option>
+              <option value="GBP">GBP</option>
+              <option value="EUR">EUR</option>
+              <option value="CAD">CAD</option>
+              <option value="AUD">AUD</option>
+            </select>
+          </label>
+          <label>
+            <span class="label-text">Vendor</span>
+            <input type="text" id="demoVendor" value="api-keys.demo" />
+          </label>
+          <label>
+            <span class="label-text">Mode</span>
+            <select id="demoMode">
+              <option value="dry-void">Dry-run → VOID path</option>
+              <option value="dry-capture">Dry-run → CAPTURE path</option>
+              <option value="live-order">Live: sandbox card (fast VOID/CAPTURE)</option>
+              <option value="live-wallet">Live: PayPal wallet (for disputes)</option>
+            </select>
+          </label>
+        </div>
+        <div class="row">
+          <button type="button" class="btn primary" id="runDemo">Run through firewall</button>
+          <span class="hint"
+            >Disputes: use Mode <strong>Live: PayPal wallet</strong> only. Sandbox card is for fast
+            VOID/CAPTURE demos (no Personal inbox payment).</span
+          >
+        </div>
+      </section>
+
+      <section class="panel conveyor-wrap">
+        <div class="panel-head">
+          <h2>Live pipeline</h2>
+          <button type="button" class="info-btn" data-help="pipeline" aria-label="About Live pipeline">
+            i
+          </button>
+        </div>
+        <div id="conveyor" class="conveyor empty">
+          <p class="empty-msg">No active transaction — fire a purchase to watch the belt.</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Sessions</h2>
+          <button type="button" class="info-btn" data-help="sessions" aria-label="About Sessions">
+            i
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Amount</th>
+                <th>Vendor</th>
+                <th>Order / Auth</th>
+                <th>Updated</th>
+              </tr>
+            </thead>
+            <tbody id="sessionRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <aside id="drawer" class="drawer" hidden>
+      <div class="drawer-inner">
+        <header>
+          <div class="panel-head drawer-head">
+            <h2>Dispute forensics</h2>
+            <button
+              type="button"
+              class="info-btn"
+              data-help="dossier"
+              aria-label="About Dispute forensics"
+            >
+              i
+            </button>
+          </div>
+          <button type="button" class="btn ghost" id="closeDrawer">Close</button>
+        </header>
+        <pre id="dossier"></pre>
+      </div>
+    </aside>
+
+    <div id="helpPopover" class="help-popover" hidden role="dialog" aria-modal="false">
+      <button type="button" class="help-close" id="helpClose" aria-label="Close help">×</button>
+      <div id="helpBody"></div>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
