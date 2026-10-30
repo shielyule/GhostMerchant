@@ -80,6 +80,9 @@ npm start                 # http://127.0.0.1:3030/
 
 Open **http://127.0.0.1:3030/** — Control Room dashboard.
 
+**Public demo (Railway):** https://ghostmerchant-production.up.railway.app/  
+Webhook URL: `https://ghostmerchant-production.up.railway.app/webhooks/paypal`
+
 ### `.env` (minimum)
 
 | Variable | Purpose |

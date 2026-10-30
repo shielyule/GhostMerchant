@@ -312,10 +312,9 @@ app.get('/disputes/list', async (_req, res) => {
   }
 })
 
-app.listen(PORT, () => {
-  console.log(`GhostMerchant listening on http://127.0.0.1:${PORT}`)
-  console.log(`Dashboard: http://127.0.0.1:${PORT}/`)
-  console.log(
-    `Webhook URL (after tunnel): ${process.env.PUBLIC_BASE_URL || `http://127.0.0.1:${PORT}`}/webhooks/paypal`,
-  )
+app.listen(PORT, '0.0.0.0', () => {
+  const publicBase = process.env.PUBLIC_BASE_URL || `http://127.0.0.1:${PORT}`
+  console.log(`GhostMerchant listening on 0.0.0.0:${PORT}`)
+  console.log(`Dashboard: ${publicBase}/`)
+  console.log(`Webhook URL: ${publicBase}/webhooks/paypal`)
 })

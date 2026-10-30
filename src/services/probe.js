@@ -4,7 +4,11 @@
  */
 
 export async function runVerificationProbe({ probeUrl, mode } = {}) {
-  const url = probeUrl || process.env.PROBE_URL || 'http://127.0.0.1:3030/demo/vendor/health'
+  const port = process.env.PORT || 3030
+  const url =
+    probeUrl ||
+    process.env.PROBE_URL ||
+    `http://127.0.0.1:${port}/demo/vendor/health`
   const forced = (mode || process.env.PROBE_MODE || 'pass').toLowerCase()
 
   if (forced === 'fail') {
