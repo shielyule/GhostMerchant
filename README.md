@@ -5,6 +5,22 @@ Agents don’t get a corporate card. GhostMerchant sits between buyer agents and
 
 Built for the [PayPal AI Hackathon](https://paypal.dev/) (sandbox).
 
+**License:** [MIT](./LICENSE)
+
+### PayPal + AI (hackathon requirement)
+
+| Tool | Role in GhostMerchant |
+|------|------------------------|
+| **PayPal Orders API** (`intent: AUTHORIZE`) | Create a hold for an agent purchase |
+| **Authorizations CAPTURE / VOID** | Settle after a healthy probe, or poison-pill VOID |
+| **PayPal Payouts** | Split a successful capture across agent budget emails |
+| **Customer Disputes API** | Attach forensic dossier evidence when seller response is allowed |
+| **PayPal Webhooks** | Async confirmation of auth / capture / void (via ngrok in dev) |
+| **PayPal Sandbox MCP + AI Toolkit** | Used in Cursor while designing and debugging sandbox flows |
+| **Cursor (AI IDE / agent)** | Primary AI tool used to build and iterate the control plane |
+
+See also [`SCENARIOS.md`](./SCENARIOS.md) for judge-facing who/trigger/value stories.
+
 ---
 
 ## Why
