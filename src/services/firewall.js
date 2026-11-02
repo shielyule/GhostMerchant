@@ -3,6 +3,7 @@
  * policy → AUTHORIZE → probe → CAPTURE | VOID
  */
 
+import { randomUUID } from 'node:crypto'
 import {
   evaluatePolicy,
   getPolicy,
@@ -108,7 +109,7 @@ export function getDashboardState() {
  * @param {number} [opts.probeDelayMs] — simulate probe countdown for dashboard (default 0; demo uses ~2500)
  */
 export async function runPoisonPillFlow(purchase, opts = {}) {
-  const id = opts.sessionId || crypto.randomUUID()
+  const id = opts.sessionId || randomUUID()
   const existing = sessions.get(id)
   const session = existing || baseSession(id, purchase)
   session.purchase = { ...purchase }
@@ -284,7 +285,7 @@ export async function settleExisting({ sessionId, authorizationId, probeMode, pr
     description: 'GhostMerchant settle',
   }
   return runPoisonPillFlow(purchase, {
-    sessionId: sessionId || crypto.randomUUID(),
+    sessionId: sessionId || randomUUID(),
     authorizationId,
     orderId: existing?.orderId,
     probeMode,
