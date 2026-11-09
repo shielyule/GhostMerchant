@@ -7,7 +7,20 @@ Built for the [PayPal AI Hackathon](https://paypal.dev/) (sandbox).
 
 **License:** [MIT](./LICENSE)
 
-### PayPal + AI (hackathon requirement)
+## Built with AI (eligibility)
+
+GhostMerchant was **designed and implemented with AI tools**, not only “about” AI agents:
+
+| AI tool / platform | How it was used to build this project |
+|--------------------|----------------------------------------|
+| **Cursor** (AI coding IDE / agent) | Primary development environment. AI pair-programming for the Express firewall, PayPal REST helpers, Control Room UI, wallet auto-resume, payouts, and dispute dossier. |
+| **LLM inside Cursor** | Generated and iterated production code, debugging (e.g. Railway `crypto` fix, Approve UX), architecture, DevPost/docs, and demo scenarios. |
+| **PayPal Sandbox MCP** | AI-invoked PayPal sandbox tools from Cursor while building and verifying Orders, payouts, and disputes flows. |
+| **PayPal AI Toolkit** (best-practices skills) | Loaded in Cursor to guide correct PayPal API usage (AUTHORIZE/CAPTURE/VOID, webhooks, disputes). |
+
+**Product side:** the Control Room is a control plane for **autonomous AI buyer agents** — policy and PayPal settlement around agent-initiated purchases.
+
+### PayPal platform (hackathon requirement)
 
 | Tool | Role in GhostMerchant |
 |------|------------------------|
@@ -16,8 +29,6 @@ Built for the [PayPal AI Hackathon](https://paypal.dev/) (sandbox).
 | **PayPal Payouts** | Split a successful capture across agent budget emails |
 | **Customer Disputes API** | Attach forensic dossier evidence when seller response is allowed |
 | **PayPal Webhooks** | Async confirmation of auth / capture / void (via ngrok in dev) |
-| **PayPal Sandbox MCP + AI Toolkit** | Used in Cursor while designing and debugging sandbox flows |
-| **Cursor (AI IDE / agent)** | Primary AI tool used to build and iterate the control plane |
 
 See also [`SCENARIOS.md`](./SCENARIOS.md) for judge-facing who/trigger/value stories.
 
